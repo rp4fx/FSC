@@ -5,6 +5,7 @@ __author__ = 'roran_000'
 import pymysql
 import random
 from Tkinter import *
+import base64
 
 
 class Application(Frame):
@@ -47,15 +48,20 @@ def enroll(cursor):
             entry = (str(s),str(courseList[x]))
             cursor.execute("INSERT INTO takes (SID,CID) VALUES (?,?)",entry)
 
+def insert_student(cursor,name,SID, db):
 
 
+    entry = [name,SID]
+    print entry
+    cursor.execute("INSERT INTO student (name,SID) VALUES ('%s','%d')" / entry )
+    db.commit()
 
 
 def main():
-    root = Tk()
-    app = Application(master=root)
-    app.mainloop()
-    root.destroy()
+    #root = Tk()
+    #app = Application(master=root)
+    #app.mainloop()
+    #root.destroy()
 
     db = pymysql.connect(host='128.143.71.84',
                      user='cs4750rp4fx',
@@ -74,8 +80,7 @@ def main():
     cursor.execute("""CREATE TABLE IF NOT EXISTS asks  (SID INT, content VARCHAR(250))""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS p_uses (PID INT, ipAddress VARCHAR(50))""")
     #enroll(cursor)
-
-
-
+    #make question table strong entity
+    insert_student(cursor,'john doe',36,db)
 if __name__ == "__main__":
     main()
