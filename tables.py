@@ -11,9 +11,10 @@ import base64
 def sql_string(str): #formats string so it doesn't cause errors
     return '"'+str+'"'
 class student():
-    def __init__(self,name,SID):#constructor
+    def __init__(self,name,SID,notification_number):#constructor
         self.name = sql_string(name)
         self.SID = SID
+        self.notification_number=notification_number
     def __str__(self):#toString
         return self.name
 class course():
@@ -36,9 +37,16 @@ class professor():
 class question():
     def __init__(self,content,date,QID):#constructor
         self.content = sql_string(content)
-        self.date = date
+        self.date = sql_string(date)
         self.QID = QID
     def __str__(self):#toString
+        return self.content
+class response():
+    def __init__(self,content,date,RID):
+        self.content = sql_string(content)
+        self.date = sql_string(date)
+        self.RID = RID
+    def __str__(self):
         return self.content
 
 class Application(Frame):
@@ -66,9 +74,12 @@ class Application(Frame):
 
 
 def insert_student(cursor,s, db):
-    cursor.execute("INSERT INTO student (name,SID) VALUES (%s,%d)"  %(s.name,s.SID))
+    cursor.execute("INSERT INTO student (name,SID,notification_number) VALUES (%s,%d,%d)"  %(s.name,s.SID,s.notification_number))
     db.commit()
-
+def get_student(cursor,SID):
+    cursor.execute("SELECT name,SID FROM student WHERE SID =%d" % (SID))
+    r = cursor.fetchone()
+    return student(r[0],r[1])
 
 
 
@@ -80,21 +91,50 @@ def create_course(cursor,course,db):
 def insert_professor(cursor,p,db):
     cursor.execute("INSERT INTO professor (name,PID,notification_number) VALUES (%s,%d,%d)" % (p.name,p.PID,p.notification_number))
     db.commit
-
+def get_professor(cursor,PID):
+    cursor.execute("SELECT name,PID,notification_number FROM professor WHERE PID =%d" % (PID))
+    r = cursor.fetchone()
+    return professor(r[0],r[1],r[2])
+def get_prof_notenum(cursor,p,):
+    cursor.execute("SELECT notification_number from professor where PID = %d" % (p.PID))
+    r = cursor.fetchone()
+    return r[0]
+def get_stud_notenum(cursor,s):
+    cursor.execute("SELECT notification_number from student where SID = %d" % (s.SID))
+    r = cursor.fetchone()
+    return r[0]
 def ask_question(cursor,q,s,p,db):
-    cursor.execute("INSERT INTO question (content,date,QID) VALUES (%s,%s,%d)") % (q.content,q.date,q.QID)
+    cursor.execute("INSERT INTO question (content,date,QID) VALUES (%s,%s,%d)" % (q.content,q.date,q.QID))
     db.commit()
     cursor.execute("INSERT INTO answers (PID,QID) VALUES (%d,%d)" % (p.PID,q.QID))
     db.commit()
     cursor.execute("INSERT INTO asks (SID,QID) VALUES (%d,%d)" %(s.SID,q.QID))
     db.commit()
-    cursor.execute("SELECT notification_number from professor where PID = %d)" % (p.PID))
-    r = cursor.fetchone()
+    #cursor.execute("SELECT notification_number from professor where PID = %d" % (p.PID))
+    #r = cursor.fetchone()
+    #r = r[0]
+    r = get_prof_notenum(cursor,p)
     r = r+1
-    cursor.execute("UPDATE professor SET notification_number = %d" % (r))
+    cursor.execute("UPDATE professor SET notification_number = %d WHERE PID = %d" % (r,p.PID))
+    db.commit()
 
+def answer_question(cursor,r,s,p,db):
+    cursor.execute("INSERT INTO responses (content,date,RID) VALUES (%s,%s,%d)" % (r.content,r.date,r.RID))
+    db.commit()
+    cursor.execute("INSERT INTO answered (PID,RID) VALUES (%d,%d)" % (p.PID,r.RID))
+    db.commit()
+    cursor.execute("INSERT INTO ansReceived (SID,RID) VALUES (%d,%d)" %(s.SID,r.RID))
+    db.commit()
+    #cursor.execute("SELECT notification_number from professor where PID = %d" % (p.PID))
+    #r = cursor.fetchone()
+    #r = r[0]
+    r = get_prof_notenum(cursor,p)
+    if(r>0):
+        r = r-1
+    cursor.execute("UPDATE professor SET notification_number = %d WHERE PID = %d" % (r,p.PID))
+    db.commit()
 
-
+#need to make method that removes professor question from db
 def main():
     #root = Tk()
     #app = Application(master=root)
@@ -106,10 +146,10 @@ def main():
                      passwd='yju6328.',
                      db='cs4750rp4fx',)
     cursor = db.cursor()
-    cursor.execute("""CREATE TABLE IF NOT EXISTS student  (name VARCHAR (50), SID INT UNIQUE)""")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS student  (name VARCHAR (50), SID INT UNIQUE,notification_number INT)""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS course  (courseID VARCHAR(10), section INT, semester VARCHAR(6), title VARCHAR(50), year INT, CID INT unique)""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS professor  (name VARCHAR(50), PID INT UNIQUE, notification_number INT)""")
-    cursor.execute("""CREATE TABLE IF NOT EXISTS question  (content VARCHAR(250), date TIMESTAMP, QID INT)""")#changed
+    cursor.execute("""CREATE TABLE IF NOT EXISTS question  (content VARCHAR(250), date VARCHAR(50), QID INT)""")#changed
     cursor.execute("""CREATE TABLE IF NOT EXISTS device  (ipAddress VARCHAR(50), type VARCHAR(50))""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS s_uses  (ipAddress VARCHAR(50), SID INT)""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS takes  (SID INT, courseID VARCHAR(10))""")
@@ -117,10 +157,13 @@ def main():
     cursor.execute("""CREATE TABLE IF NOT EXISTS answers  (PID INT, QID INT)""")#changed
     cursor.execute("""CREATE TABLE IF NOT EXISTS asks  (SID INT, QID INT)""")#changed
     cursor.execute("""CREATE TABLE IF NOT EXISTS p_uses (PID INT, ipAddress VARCHAR(50))""")
-    #enroll(cursor)
-    #make question table strong entity
-    #insert_student(cursor,'john doe',36,db)
-   # c = course("cs4200",1,"fall","What is sleep",2013,12)
-    #create_course(cursor,c,db)
+    #created table for professors to respond to students
+    cursor.execute("""CREATE TABLE IF NOT EXISTS responses (content VARCHAR(250),date VARCHAR(50), RID INT UNIQUE)""")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS answered(PID INT,RID INT)""")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS ansReceived(SID INT,RID INT)""")
+    #q = question("hello",'2013-11-11',1)
+    #s = get_student(cursor,1)
+    #p = get_professor(cursor,12)
+    #ask_question(cursor,q,s,p,db)
 if __name__ == "__main__":
     main()
