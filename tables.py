@@ -76,10 +76,11 @@ class Application(Frame):
 def insert_student(cursor,s, db):
     cursor.execute("INSERT INTO student (name,SID,notification_number) VALUES (%s,%d,%d)"  %(s.name,s.SID,s.notification_number))
     db.commit()
+
 def get_student(cursor,SID):
-    cursor.execute("SELECT name,SID FROM student WHERE SID =%d" % (SID))
+    cursor.execute("SELECT name,SID,notification_number FROM student WHERE SID =%d" % (SID))
     r = cursor.fetchone()
-    return student(r[0],r[1])
+    return student(r[0],r[1],r[2])
 
 
 
@@ -91,18 +92,59 @@ def create_course(cursor,course,db):
 def insert_professor(cursor,p,db):
     cursor.execute("INSERT INTO professor (name,PID,notification_number) VALUES (%s,%d,%d)" % (p.name,p.PID,p.notification_number))
     db.commit
+
 def get_professor(cursor,PID):
     cursor.execute("SELECT name,PID,notification_number FROM professor WHERE PID =%d" % (PID))
     r = cursor.fetchone()
     return professor(r[0],r[1],r[2])
+
+def get_classes(cursor,CID):
+    cursor.execute("SELECT courseID, section,semester, title, year,CID FROM course WHERE CID =%d" % (CID))
+    r = cursor.fetchone()
+    return course(r[0],r[1],r[2],r[3],r[4],r[5])
+
+def get_prof_class(cursor,c):
+    cursor.execute("SELECT name FROM professor NATURAL JOIN course NATURAL JOIN teaches WHERE courseID = %s" %(c.courseID))
+    for r in cursor:
+        print r
+
+def get_question(cursor,QID):
+    cursor.execute("SELECT content,date,QID FROM question WHERE QID = %d" % (QID))
+    r = cursor.fetchone()
+    return question(r[0],r[1],r[2])
+
+def get_response(cursor,QID):
+    cursor.execute("SELECT content,date,QID FROM question WHERE QID = %d" % (QID))
+    r = cursor.fetchone()
+    return question(r[0],r[1],r[2])
+
 def get_prof_notenum(cursor,p,):
     cursor.execute("SELECT notification_number from professor where PID = %d" % (p.PID))
     r = cursor.fetchone()
     return r[0]
+
 def get_stud_notenum(cursor,s):
     cursor.execute("SELECT notification_number from student where SID = %d" % (s.SID))
     r = cursor.fetchone()
     return r[0]
+def increment_prof(cursor,p,db):
+    r = get_prof_notenum(cursor,p)
+    r = r+1
+    cursor.execute("UPDATE professor SET notification_number = %d WHERE PID = %d" % (r,p.PID))
+    db.commit()
+
+def increment_stud(cursor,s,db):
+    r = get_stud_notenum(cursor,s)
+    r=r+1
+    cursor.execute("UPDATE student SET notification_number =%d WHERE SID = %d" %(r,s.SID))
+
+def decrement_prof(cursor,p,db):
+    r = get_prof_notenum(cursor,p)
+    if(r>0):
+        r = r-1
+    cursor.execute("UPDATE professor SET notification_number = %d WHERE PID = %d" % (r,p.PID))
+    db.commit()
+
 def ask_question(cursor,q,s,p,db):
     cursor.execute("INSERT INTO question (content,date,QID) VALUES (%s,%s,%d)" % (q.content,q.date,q.QID))
     db.commit()
@@ -113,10 +155,7 @@ def ask_question(cursor,q,s,p,db):
     #cursor.execute("SELECT notification_number from professor where PID = %d" % (p.PID))
     #r = cursor.fetchone()
     #r = r[0]
-    r = get_prof_notenum(cursor,p)
-    r = r+1
-    cursor.execute("UPDATE professor SET notification_number = %d WHERE PID = %d" % (r,p.PID))
-    db.commit()
+    increment_prof(cursor,p,db)
 
 def answer_question(cursor,r,s,p,db):
     cursor.execute("INSERT INTO responses (content,date,RID) VALUES (%s,%s,%d)" % (r.content,r.date,r.RID))
@@ -128,13 +167,10 @@ def answer_question(cursor,r,s,p,db):
     #cursor.execute("SELECT notification_number from professor where PID = %d" % (p.PID))
     #r = cursor.fetchone()
     #r = r[0]
-    r = get_prof_notenum(cursor,p)
-    if(r>0):
-        r = r-1
-    cursor.execute("UPDATE professor SET notification_number = %d WHERE PID = %d" % (r,p.PID))
-    db.commit()
+    decrement_prof(cursor,p,db)
+    increment_stud(cursor,s,db)
 
-#need to make method that removes professor question from db
+
 def main():
     #root = Tk()
     #app = Application(master=root)
@@ -161,9 +197,14 @@ def main():
     cursor.execute("""CREATE TABLE IF NOT EXISTS responses (content VARCHAR(250),date VARCHAR(50), RID INT UNIQUE)""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS answered(PID INT,RID INT)""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS ansReceived(SID INT,RID INT)""")
-    #q = question("hello",'2013-11-11',1)
-    #s = get_student(cursor,1)
-    #p = get_professor(cursor,12)
+    q = question("hello",'2013-11-11',1)
+    s = get_student(cursor,1)
+    p = get_professor(cursor,12)
+    r = response('hi','2013-11-27',1)
     #ask_question(cursor,q,s,p,db)
+    #answer_question(cursor,r,s,p,db)
+    c = get_classes(cursor,6)
+    print c
+    get_prof_class(cursor,c)
 if __name__ == "__main__":
     main()
