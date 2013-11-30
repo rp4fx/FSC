@@ -8,6 +8,29 @@ from Tkinter import *
 import base64
 import os
 
+
+class Example(Frame):
+
+    def __init__(self, parent):
+        Frame.__init__(self, parent, background="white")
+
+        self.parent = parent
+        self.parent.title("Centered window")
+        self.pack(fill=BOTH, expand=1)
+        self.centerWindow()
+
+    def centerWindow(self):
+
+        w = 290
+        h = 150
+
+        sw = self.parent.winfo_screenwidth()
+        sh = self.parent.winfo_screenheight()
+
+        x = (sw - w)/2
+        y = (sh - h)/2
+        self.parent.geometry('%dx%d+%d+%d' % (w, h, x, y))
+
 def sql_string(str): #formats string so it doesn't cause errors
     return '"'+str+'"'
 
@@ -72,28 +95,28 @@ class response():
     def __str__(self):
         return self.content
 
-class Application(Frame):
-    def say_hi(self):
-        print "hi there, everyone!"
-
-    def createWidgets(self):
-        self.QUIT = Button(self)
-        self.QUIT["text"] = "QUIT"
-        self.QUIT["fg"]   = "red"
-        self.QUIT["command"] =  self.quit
-
-        self.QUIT.pack({"side": "left"})
-
-        self.hi_there = Button(self)
-        self.hi_there["text"] = "Hello",
-        self.hi_there["command"] = self.say_hi
-
-        self.hi_there.pack({"side": "left"})
-
-    def __init__(self, master=None):
-        Frame.__init__(self, master)
-        self.pack()
-        self.createWidgets()
+#class Application(Frame):
+#    def say_hi(self):
+#        print "hi there, everyone!"
+#
+#    def createWidgets(self):
+#        self.QUIT = Button(self)
+#        self.QUIT["text"] = "QUIT"
+#        self.QUIT["fg"]   = "red"
+#        self.QUIT["command"] =  self.quit
+#
+#        self.QUIT.pack({"side": "left"})
+#
+#        self.hi_there = Button(self)
+#        self.hi_there["text"] = "Hello",
+#        self.hi_there["command"] = self.say_hi
+#
+#        self.hi_there.pack({"side": "left"})
+#
+#    def __init__(self, master=None):
+#        Frame.__init__(self, master)
+#        self.pack()
+#        self.createWidgets()
 
 def sql_injection_prevent(string):#works
        if ('\'' in string or '\"'):
@@ -213,15 +236,19 @@ def login(username,password,userType,cursor):
     if(password == decode(r[0])):
         print "logged in"
 
-def signup(username,password,userType,):
-    print "s"
+
+
+
+def signup(username,password,userType,cursor,db):
+    cursor.execute("INSERT INTO userCred (username,password,userType) VALUES (%s,%s,%s)"%(username,userType,password))
+    db.commit()
 
 
 def main():
-    #root = Tk()
-    #app = Application(master=root)
-    #app.mainloop()
-    #root.destroy()
+    root = Tk()
+    app = Application(master=root)
+    app.mainloop()
+    root.destroy()
 
 
     #create admin user who can edit course related tables
@@ -230,7 +257,7 @@ def main():
                      passwd='yju6328.',
                      db='cs4750rp4fx',)
     cursor = db.cursor()
-    cursor.execute("""CREATE TABLE IF NOT EXISTS userCred (username VARCHAR(50) UNIQUE,password VARCHAR(50), userType VARCHAR(50)""")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS userCred (username VARCHAR(50) UNIQUE,password VARCHAR(50), userType VARCHAR(50))""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS studentuser (username VARCHAR (50),SID INT)""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS profuser (userhame VARCHAR (50), PID INT)""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS student  (name VARCHAR (50), SID INT UNIQUE,notification_number INT)""")
