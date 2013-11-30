@@ -29,19 +29,10 @@
       <file leaf-file-name="tables.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tables.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="106" column="87" selection-start="3435" selection-end="3435" vertical-scroll-proportion="0.827027" vertical-offset="1496" max-vertical-offset="3655">
+            <state line="232" column="59" selection-start="7369" selection-end="7369" vertical-scroll-proportion="0.55263156" vertical-offset="3629" max-vertical-offset="4488">
               <folding>
-                <marker date="1385615639276" expanded="true" signature="5849:5940" placeholder="..." />
+                <marker date="1385847628927" expanded="true" signature="6965:7056" placeholder="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="cursors.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://C:/Python27/Lib/site-packages/pymysql/cursors.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="103" column="21" selection-start="2998" selection-end="2998" vertical-scroll-proportion="0.0" vertical-offset="1751" max-vertical-offset="6460">
-              <folding />
             </state>
           </provider>
         </entry>
@@ -129,7 +120,8 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="recentsLimit" value="5" />
     <property name="options.lastSelected" value="com.jetbrains.python.configuration.PythonSdkConfigurable" />
-    <property name="last_opened_file_path" value="$USER_HOME$/PycharmProjects/Side Stuff" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="FullScreen" value="false" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
   </component>
@@ -345,7 +337,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -356,7 +348,7 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32840723" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32840723" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -381,9 +373,73 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/tables.py">
       <provider selected="true" editor-type-id="text-editor">
+        <state line="44" column="18" selection-start="1335" selection-end="1335" vertical-scroll-proportion="0.0" vertical-offset="3085" max-vertical-offset="3655">
+          <folding>
+            <marker date="1385847628927" expanded="true" signature="6965:7056" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/pymysql/cursors.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="103" column="21" selection-start="2998" selection-end="2998" vertical-scroll-proportion="0.0" vertical-offset="1751" max-vertical-offset="6460">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tables.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="44" column="18" selection-start="1335" selection-end="1335" vertical-scroll-proportion="0.0" vertical-offset="272" max-vertical-offset="3655">
+          <folding>
+            <marker date="1385847628927" expanded="true" signature="6965:7056" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/pymysql/cursors.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="103" column="21" selection-start="2998" selection-end="2998" vertical-scroll-proportion="0.0" vertical-offset="1751" max-vertical-offset="6460">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tables.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="26" column="22" selection-start="750" selection-end="750" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3655">
+          <folding>
+            <marker date="1385847628927" expanded="true" signature="6965:7056" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/pymysql/cursors.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="103" column="21" selection-start="2998" selection-end="2998" vertical-scroll-proportion="0.0" vertical-offset="1751" max-vertical-offset="6460">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tables.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="106" column="87" selection-start="3435" selection-end="3435" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3655">
+          <folding>
+            <marker date="1385847628927" expanded="true" signature="6965:7056" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Python27/Lib/site-packages/pymysql/cursors.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="103" column="21" selection-start="2998" selection-end="2998" vertical-scroll-proportion="0.0" vertical-offset="1751" max-vertical-offset="6460">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tables.py">
+      <provider selected="true" editor-type-id="text-editor">
         <state line="80" column="27" selection-start="2616" selection-end="2616" vertical-scroll-proportion="0.0" vertical-offset="1088" max-vertical-offset="1615">
           <folding>
-            <marker date="1385615639276" expanded="true" signature="5849:5940" placeholder="..." />
+            <marker date="1385847628927" expanded="true" signature="6965:7056" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -399,7 +455,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="68" column="67" selection-start="2104" selection-end="2104" vertical-scroll-proportion="0.0" vertical-offset="926" max-vertical-offset="1462">
           <folding>
-            <marker date="1385615639276" expanded="true" signature="5849:5940" placeholder="..." />
+            <marker date="1385847628927" expanded="true" signature="6965:7056" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -413,18 +469,14 @@
     </entry>
     <entry file="file://$USER_HOME$/PycharmProjects/Side Stuff/secret santa.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="30" selection-start="667" selection-end="667" vertical-scroll-proportion="0.7545692" vertical-offset="119" max-vertical-offset="1258">
-          <folding>
-            <element signature="e#26#51#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="24" column="30" selection-start="667" selection-end="667" vertical-scroll-proportion="0.7545692" vertical-offset="119" max-vertical-offset="1258" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tables.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="106" column="87" selection-start="3435" selection-end="3435" vertical-scroll-proportion="0.827027" vertical-offset="1496" max-vertical-offset="3655">
+        <state line="232" column="59" selection-start="7369" selection-end="7369" vertical-scroll-proportion="0.55263156" vertical-offset="3629" max-vertical-offset="4488">
           <folding>
-            <marker date="1385615639276" expanded="true" signature="5849:5940" placeholder="..." />
+            <marker date="1385847628927" expanded="true" signature="6965:7056" placeholder="..." />
           </folding>
         </state>
       </provider>

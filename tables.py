@@ -7,9 +7,30 @@ import pymysql
 import random
 from Tkinter import *
 import base64
+import os
 
 def sql_string(str): #formats string so it doesn't cause errors
     return '"'+str+'"'
+
+def encode(str):
+    return base64.b64encode(str)
+
+def decode(str):
+    return base64.b64decode(str)
+
+class user():
+    def __init__(self,name,username,password,userType):
+        self.name= name
+        self.username = username
+        self.password = encode(password)
+        self.userType = userType
+    def __str__(self):
+        return "Name: "+self.name + " self.username: " +self.username+" userType: "+self.userType
+    def get_password(self):
+        return decode(self.password)
+
+
+
 class student():
     def __init__(self,name,SID,notification_number):#constructor
         self.name = sql_string(name)
@@ -17,6 +38,7 @@ class student():
         self.notification_number=notification_number
     def __str__(self):#toString
         return self.name
+
 class course():
     def __init__(self,courseID,section,semester,title,year,CID): #constructor
         self.courseID = sql_string(courseID)
@@ -27,6 +49,7 @@ class course():
         self.CID = CID
     def __str__(self):#toString
         return self.title
+
 class professor():
     def __init__(self,name,PID,notification_number):#constructor
         self.name = sql_string(name)
@@ -34,6 +57,7 @@ class professor():
         self.notification_number = notification_number
     def __str__(self):#toString
         return self.name
+
 class question():
     def __init__(self,content,date,QID):#constructor
         self.content = sql_string(content)
@@ -41,6 +65,7 @@ class question():
         self.QID = QID
     def __str__(self):#toString
         return self.content
+
 class response():
     def __init__(self,content,date,RID):
         self.content = sql_string(content)
@@ -71,6 +96,12 @@ class Application(Frame):
         Frame.__init__(self, master)
         self.pack()
         self.createWidgets()
+
+def sql_injection_prevent(string):#works
+       if ('\'' in string or '\"'):
+            print 'Don\'t hack me'
+            sys.exit()
+
 
 
 def insert_student(cursor,s, db):
@@ -145,6 +176,12 @@ def decrement_prof(cursor,p,db):
     cursor.execute("UPDATE professor SET notification_number = %d WHERE PID = %d" % (r,p.PID))
     db.commit()
 
+def decrement_student(cursor,s,db):
+    r = get_stud_notenum(cursor,s)
+    if(r>0):
+        r = r-1
+    cursor.execute("UPDATE student SET notification_number =%d WHERE SID = %d" %(r,s.SID))
+
 def ask_question(cursor,q,s,p,db):
     cursor.execute("INSERT INTO question (content,date,QID) VALUES (%s,%s,%d)" % (q.content,q.date,q.QID))
     db.commit()
@@ -171,17 +208,29 @@ def answer_question(cursor,r,s,p,db):
     increment_stud(cursor,s,db)
 
 
+def login(username,password,userType,cursor):
+    cursor.execute("SELECT password,userType from userCred WHERE username = (%s)" % (username,userType))
+    r = cursor.fetchone()
+    if(password == decode(r[0])):
+        print "logged in"
+
+def signup(username,password,userType,)
+
+
 def main():
     #root = Tk()
     #app = Application(master=root)
     #app.mainloop()
     #root.destroy()
 
+
+    #create admin user who can edit course related tables
     db = pymysql.connect(host='128.143.71.84',
                      user='cs4750rp4fx',
                      passwd='yju6328.',
                      db='cs4750rp4fx',)
     cursor = db.cursor()
+    cursor.execute("""CREATE TABLE IF NOT EXISTS userCred ( username VARCHAR(50) UNIQUE,password VARCHAR(50), userType VARCHAR(50)""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS student  (name VARCHAR (50), SID INT UNIQUE,notification_number INT)""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS course  (courseID VARCHAR(10), section INT, semester VARCHAR(6), title VARCHAR(50), year INT, CID INT unique)""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS professor  (name VARCHAR(50), PID INT UNIQUE, notification_number INT)""")
