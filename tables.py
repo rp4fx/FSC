@@ -3,7 +3,7 @@ __author__ = 'roran_000'
 
 
 import pymysql
-#import cymysql
+
 import random
 from Tkinter import *
 import base64
@@ -19,8 +19,7 @@ def decode(str):
     return base64.b64decode(str)
 
 class user():
-    def __init__(self,name,username,password,userType):
-        self.name= name
+    def __init__(self,username,password,userType):
         self.username = username
         self.password = encode(password)
         self.userType = userType
@@ -158,6 +157,7 @@ def get_stud_notenum(cursor,s):
     cursor.execute("SELECT notification_number from student where SID = %d" % (s.SID))
     r = cursor.fetchone()
     return r[0]
+
 def increment_prof(cursor,p,db):
     r = get_prof_notenum(cursor,p)
     r = r+1
@@ -214,7 +214,8 @@ def login(username,password,userType,cursor):
     if(password == decode(r[0])):
         print "logged in"
 
-def signup(username,password,userType,)
+def signup(username,password,userType,):
+    print "s"
 
 
 def main():
@@ -230,18 +231,22 @@ def main():
                      passwd='yju6328.',
                      db='cs4750rp4fx',)
     cursor = db.cursor()
-    cursor.execute("""CREATE TABLE IF NOT EXISTS userCred ( username VARCHAR(50) UNIQUE,password VARCHAR(50), userType VARCHAR(50)""")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS userCred (username VARCHAR(50) UNIQUE,password VARCHAR(50), userType VARCHAR(50)""")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS studentuser (username VARCHAR (50),SID INT)""")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS profuser (userhame VARCHAR (50), PID INT)""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS student  (name VARCHAR (50), SID INT UNIQUE,notification_number INT)""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS course  (courseID VARCHAR(10), section INT, semester VARCHAR(6), title VARCHAR(50), year INT, CID INT unique)""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS professor  (name VARCHAR(50), PID INT UNIQUE, notification_number INT)""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS question  (content VARCHAR(250), date VARCHAR(50), QID INT)""")#changed
-    cursor.execute("""CREATE TABLE IF NOT EXISTS device  (ipAddress VARCHAR(50), type VARCHAR(50))""")
-    cursor.execute("""CREATE TABLE IF NOT EXISTS s_uses  (ipAddress VARCHAR(50), SID INT)""")
+    #cursor.execute("""CREATE TABLE IF NOT EXISTS device  (ipAddress VARCHAR(50), type VARCHAR(50))""")
+    #cursor.execute("""CREATE TABLE IF NOT EXISTS s_uses  (ipAddress VARCHAR(50), SID INT)""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS takes  (SID INT, courseID VARCHAR(10))""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS teaches  (PID INT, CID INT)""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS answers  (PID INT, QID INT)""")#changed
     cursor.execute("""CREATE TABLE IF NOT EXISTS asks  (SID INT, QID INT)""")#changed
-    cursor.execute("""CREATE TABLE IF NOT EXISTS p_uses (PID INT, ipAddress VARCHAR(50))""")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS qcourse (CID INT,QID INT)""")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS rcourse (CID INT,RID INT)""")
+    #cursor.execute("""CREATE TABLE IF NOT EXISTS p_uses (PID INT, ipAddress VARCHAR(50))""")
     #created table for professors to respond to students
     cursor.execute("""CREATE TABLE IF NOT EXISTS responses (content VARCHAR(250),date VARCHAR(50), RID INT UNIQUE)""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS answered(PID INT,RID INT)""")
